@@ -11,6 +11,7 @@ import study.datajpa.domain.Member;
 import study.datajpa.domain.Team;
 import study.datajpa.dto.MemberDto;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -125,6 +126,22 @@ public class MemberRepositoryTest {
 
         for (MemberDto dto : memberDto) {
             System.out.println("dto = " + dto);
+        }
+
+    }
+
+    @Test
+    @DisplayName("컬렉션 파라미터 바인딩")
+    public void findByNames() throws Exception {
+
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
+        for (Member member : result) {
+            System.out.println("member = " + member);
         }
 
     }
