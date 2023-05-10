@@ -1,6 +1,7 @@
 package study.datajpa.repository;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,6 +59,7 @@ public class MemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("메소드 이름으로 쿼리 생성")
     public void findByUsernameAndAgeGreaterThan() throws Exception {
 
         Member m1 = new Member("AAA", 10);
@@ -71,4 +73,20 @@ public class MemberRepositoryTest {
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result.size()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("메소드에 쿼리 정의하기")
+    public void testQuery() throws Exception {
+
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+        List<Member> result = memberRepository.findUser("AAA", 10);
+
+        assertThat(result.get(0).getUsername()).isEqualTo("AAA");
+        assertThat(result.get(0).getAge()).isEqualTo(10);
+
+    }
+
 }
