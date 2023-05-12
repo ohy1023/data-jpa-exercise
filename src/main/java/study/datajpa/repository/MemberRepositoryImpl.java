@@ -3,7 +3,7 @@ package study.datajpa.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import study.datajpa.domain.Member;
+import study.datajpa.entity.Member;
 
 import java.util.List;
 

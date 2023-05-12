@@ -11,8 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import study.datajpa.domain.Member;
-import study.datajpa.domain.Team;
+import study.datajpa.entity.Member;
+import study.datajpa.entity.Team;
 import study.datajpa.dto.MemberDto;
 
 import java.util.Arrays;
