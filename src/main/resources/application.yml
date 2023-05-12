@@ -7,9 +7,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-      properties:
-        hibernate:
-          format_sql: true
+    properties:
+      hibernate:
+        format_sql: ture
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6

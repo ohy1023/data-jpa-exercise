@@ -2,7 +2,6 @@ package study.datajpa.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -31,8 +29,8 @@ public class MemberRepositoryTest {
     @Autowired
     TeamRepository teamRepository;
 
-//    @PersistenceContext
-//    EntityManager em;
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     public void testMember() {
@@ -205,6 +203,66 @@ public class MemberRepositoryTest {
         assertThat(resultCnt).isEqualTo(3);
 
     }
+
+    @Test
+    @DisplayName("지연 로딩 - N + 1 문제 - entityGraph 해결")
+    public void findMemberLazy() throws Exception {
+
+        // given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 10, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+
+        em.flush();
+        em.clear();
+
+        // when N + 1
+        // select Member 1
+        List<Member> members = memberRepository.findAll();
+        for (Member member : members) {
+            System.out.println("member = " + member);
+            System.out.println("member.getTeam().getClass() = " + member.getTeam().getClass());
+            System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+        }
+        // then
+
+    }
+    @Test
+    @DisplayName("지연 로딩 - N + 1 문제 - fetch 조인으로 해결")
+    public void findMemberLazy2() throws Exception {
+
+        // given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 10, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+
+        em.flush();
+        em.clear();
+
+        // when N + 1
+        // select Member 1
+        List<Member> members = memberRepository.findMemberFetchJoin();
+        for (Member member : members) {
+            System.out.println("member = " + member);
+            System.out.println("member.getTeam().getClass() = " + member.getTeam().getClass());
+            System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+        }
+        // then
+
+    }
+
 
 
 }
